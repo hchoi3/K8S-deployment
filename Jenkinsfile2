@@ -15,10 +15,20 @@ pipeline {
 
         stage('Deploying App to Kubernetes') {
             steps {
-                sh "whoami"
                 sh "kubectl apply -f deploymentservice.yml"
       }
     }
+        stage('deletion of deployment and service') {
+            input {
+                message "Ready to delete?"
+                ok "Yes"
+            }    
+
+            steps{
+                sh 'kubectl delete deployment devsecops-kubernetes-deployment'
+                sh 'kubectl delete svc devsecops-service'
+            }
+        }
 
 }
 }
